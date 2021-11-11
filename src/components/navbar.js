@@ -1,11 +1,26 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import "../css/navbar.css";
 import "bootstrap/dist/css/bootstrap.min.css"
+import {
+  NavItem,
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem, Container, Input
+} from 'reactstrap';
 
+const NavbarItem = ({isLogin}) =>{
 
+  const [isOpen,setIsOpen] = useState(false)
+  const toggle = () => setIsOpen(!isOpen);
+  const history = useHistory();
 
-const NavbarItem = () => {
+  const logOut = () => {
+      localStorage.removeItem('isLogin')
+      localStorage.removeItem('token')
+      history.push('/')
+  }
   return (
     <div className="navbar p-0">
       <nav class="navbar navbar-expand-lg navbar-light bg-white mt-0">
@@ -35,11 +50,42 @@ const NavbarItem = () => {
             </li>
           </ul>
           <div class="secondary-menu">
-            <ul class="menu">
-                <li><Link to="/login"><button class="login">Login</button> </Link></li>
-                <li><Link to="/signup"><button class="signup">Sign up</button></Link></li>
-                     
-            </ul>
+          {
+                            isLogin !== 'true'?(
+                                <div className="d-flex align-items-center  ">
+                                    <NavItem className="me-1 fw-bold">
+                                            <Link className='text-decoration-none text-dark me-3' to ='/login'>Login</Link>
+                                    </NavItem>
+                                    <NavItem>
+                                            <Link className='btn text-dark cursor rounded-pill bgyellow ' to ='/register'>SignUp</Link>
+                                    </NavItem> 
+                                </div>
+                            ):(
+                                <div className='d-flex align-items-center '>
+                                    <Input className = 'p-1 fs15' placeholder='Search' type="text" name=""/>
+                                    <div className="chat">
+                                        <div className="notif">
+                                            <p>1</p>
+                                        </div>
+                                        <img src="https://image.flaticon.com/icons/png/512/1380/1380370.png" alt="" />
+                                    </div>
+                                    
+                                        <UncontrolledDropdown nav inNavbar >
+                                            <DropdownToggle nav >
+                                                <div className="image">
+                                                    <img src="http://railsgirls.com/images/cluj/anonim.png" alt='' />
+                                                </div>
+                                            </DropdownToggle>
+                                            <DropdownMenu right>
+                                                <DropdownItem onClick={logOut}>
+                                                    LogOut
+                                                </DropdownItem>
+                                            </DropdownMenu>
+                                        </UncontrolledDropdown>
+                                    
+                                </div>
+                            )
+                        }
          </div>
         </div>
       </nav>

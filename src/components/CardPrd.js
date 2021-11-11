@@ -16,7 +16,7 @@ const CardPrd = ({handleDetails}) => {
                 onClick={()=> handleDetails(e.id)}
               >
               <img
-                src={e.image}
+                src={`http://localhost:8800/upload/${e.image}`}
                     className="card-img-top rounded-circle position-absolute ms-3"
                     style={{width: '120px', height: '120px'}}
                     alt="Produk"

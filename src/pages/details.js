@@ -3,30 +3,46 @@ import NavbarItem from "../components/navbar";
 import Footer from "../components/footer";
 import "../css/details.css";
 import axios from "axios";
+import { useHistory } from "react-router";
 
 const Details = () => {
   const data = localStorage.getItem("details");
   const obj = JSON.parse(data);
   const [details] = useState(obj);
-
-const removePrd = () =>{
-    axios.remove('http://localhost:8800/product', { headers: { token: "456" }})
-    .then()
-}  
-
-  
+  const token = localStorage.getItem('token')
+  const history = useHistory()
+  const handleEdit = (id) => {
+    history.push(`/edit/${id}`);
+  };
+  const handleadd = (id) => {
+    history.push(`/add/${id}`);
+  };
+const removePrd=()=>{
+  const id = details.id
+  const headers={
+    headers: {
+      token: token
+    }
+  }
+  axios.delete(`http://localhost:8800/product/${id}`,headers)
+  .then( history.push(`/product`))
+  .catch((err)=>{
+    alert(err)
+  })
+}
+const loginStatus = localStorage.getItem('isLogin')
 
   
   return (
     <div>
       <div className="border-bottom navbarDetails">
-        <NavbarItem isLogin={true} />
+        <NavbarItem  isLogin= {loginStatus} />
       </div>
       <section className="container-fluid details">
        
         <div className="row justify-content-lg-between infoDeliv">
           <div className="col-lg-4 ms-lg-5 mt-lg-5 mt-3 left">
-            <img src={details.image} alt="detail"/>
+            <img src={`http://localhost:8800/upload/${details.image}`} alt="detail"/>
             
           </div>
 
@@ -41,8 +57,9 @@ const removePrd = () =>{
 
               <div className="col-lg-8 mt-lg-5 mt-5 handleAdd">
                 <div className="btn-group-vertical">
-                  <button type="button"  className="btn add">edit</button>
+                  <button type="button"  className="btn add" onClick={() => handleEdit(details.id)}>edit</button>
                   <button type="button" onClick={removePrd} className="btn ask mt-4">delete</button>
+                  <button type="button"  className="btn add mt-4" onClick={() => handleadd(details.id)}>add product</button>
                 </div>
               </div>
 

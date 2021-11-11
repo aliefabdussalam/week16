@@ -3,10 +3,12 @@ import Footer from "../components/footer"
 import "../css/home.css";
 
 const Home = () => {
+    const loginStatus = localStorage.getItem('isLogin')
+    console.log(loginStatus)
     return(
         <div>
            
-                <NavbarItem />
+                <NavbarItem isLogin= {loginStatus}/>
         
             <main>
             <div class="maincontent container-fluid p-0 m-0">

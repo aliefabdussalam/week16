@@ -49,12 +49,13 @@ const Products = () => {
 
   const history = useHistory()
  
- 
+  const token = localStorage.getItem('token')
   useEffect(()=>{
-    axios.get('http://localhost:8800/product', { headers: { token: "456" }})
+    axios.get(`${process.env.REACT_APP_API_URL}product`, { headers: { token }})
     .then((response)=>{
       const data = response.data.data.data
       setProducts(data);
+      console.log('masuk')
     }).catch((err)=>{
       console.log(err)
     })
@@ -71,13 +72,26 @@ const Products = () => {
       }
     })
   }
-
-  
+  const [search, setSearch]= useState("")
+  const changeSearch=(event)=>{
+    setSearch(event.target.value)
+  }
+  const handleSubmit = (data) =>{  
+      data.preventDefault() 
+      setSearch(data)
+      axios.get(`${process.env.REACT_APP_API_URL}product?search=${search}`, {headers: {token: token} })
+      .then((response)=>{
+        setProducts(response.data.data.data)
+      }).catch((err)=>{
+        alert(err)
+      })
+    
+}
   
   return (
     <div>
       <div className="navbarProducts border-bottom">
-        <NavbarItem />
+        <NavbarItem isLogin='true'/>
       </div>
       <section className="container-fluid promo">
         <div className="row">
@@ -91,7 +105,7 @@ const Products = () => {
               </div>
               <div className="row d-md-flex flex-md-column d-flex flex-column justify-content-lg-center align-items-lg-center col-lg-10 pt-5 testiCard">                
                 {promo.map((e, i) => (
-                  <div key={i} id={e.id} className="card mb-3 mx-md-2 mx-2 rounded">
+                  <div key={i} id={e.id} className="card mb-3 mx-md-2 mx-2" style={{borderRadius:"25px"}}>
                     <div className="row g-0">
                       <div className="col-md-4 col-4">
                         <img
@@ -135,7 +149,10 @@ const Products = () => {
 
           <div className="col-lg-7 col-md-12 product">
             
-
+          <form onSubmit={handleSubmit} className='d-flex justify-content-center'>
+                        <input type="text" onChange={changeSearch} value={search} name="search" placeholder="Cari Product" className='form-control w-75 me-2 mt-3'/>
+                        <button type="submit" className='btn btn-success'>Search</button>
+                    </form>     
             <div className="container-fluid mt-lg-5 mt-md-5 ms-lg-5 ms-md-0 menuProduct">
               <div className="row itemProduct">
               <DataContext.Provider value={products}>

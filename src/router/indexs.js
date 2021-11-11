@@ -5,6 +5,8 @@ import Product from '../pages/product'
 import Login from '../pages/login'
 import Signup from '../pages/signup'
 import Details from '../pages/details'
+import Edit from '../pages/editprd'
+import Add from '../pages/addprd'
 
 import Guard from './Guard'
 
@@ -14,18 +16,16 @@ const Router = () => {
       <Route path="/" exact>
         <Home />
       </Route>
-      <Route path="/product">
-        <Product />
-      </Route>
+      <Guard path="/product" component={Product} />
       <Route path="/login">
         <Login />
       </Route>
       <Route path="/signup">
         <Signup />
       </Route>
-      <Route path="/details/:id">
-        <Details />
-      </Route>
+      <Guard path="/details/:id" component={Details} />
+      <Guard path='/edit/:id' component={Edit} />
+      <Guard path='/add/:id' component={Add} />
     </Switch>
   )
 }

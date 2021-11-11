@@ -2,13 +2,16 @@ import {Route, Redirect} from 'react-router-dom'
 
 const Guard = ({ component: Component, ...rest}) => {
     const token = localStorage.getItem('token')
+  
     return(
         <Route {...rest} render={
             (props) => {
-                if(token === "123"){
+                if(token){
                     return <Component {...props} />
                 }else{
-                    return <Redirect to="/" />
+                    alert('harap login dahulu')
+                    return  <Redirect to="/" />
+                    
                 }
             }
         } />
